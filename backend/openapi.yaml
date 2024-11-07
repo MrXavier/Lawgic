@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: Chat Completion API
+  description: API for handling chatbot interactions and completion requests.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+
+paths:
+  /completion:
+    post:
+      summary: Get completion from the assistant model.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                  description: The model to use for completion.
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        enum: [system, user, assistant]
+                      content:
+                        type: string
+                        description: The content of the message.
+                  description: Array of messages to send to the assistant.
+              required:
+                - model
+                - messages
+      responses:
+        '200':
+          description: Successful completion response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completion:
+                    type: string
+                    description: The generated completion response.
+        '400':
+          description: Bad request. Invalid input.
+        '500':
+          description: Internal server error.
+
+  /chatbot:
+    post:
+      summary: Send a message to the chatbot.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: The user message to the chatbot.
+              required:
+                - message
+      responses:
+        '200':
+          description: Successful response from chatbot.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                    description: The chatbot's response.
+        '400':
+          description: Bad request. Invalid input.
+        '500':
+          description: Internal server error.

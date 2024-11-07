@@ -14,7 +14,7 @@ def health_check():
 @app.route('/completion', methods=['POST'])
 def get_completion():
   data = request.get_json()
-  print(data)
+  print("request json: ", data)
 
   model = data.get('model')
   messages = data.get('messages')

@@ -34,6 +34,8 @@ def get_embedding(text: str) -> dict:
         }
 
         response = requests.post(url, params=params, headers=headers, json=data)
+        if response.json().get("error") is not None:
+            print(" -- error calling embedings - response: ", response.json())
         return response.json()
 
     except Exception as e:

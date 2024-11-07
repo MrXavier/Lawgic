@@ -19,38 +19,33 @@ def get_relevant_context(question: str) -> str:
 
         search_results = search_vectors(embedding)
         # print(" -- search_results:", search_results)
+        # print(" -- paragraph_content: " + search_results['data'][0]['paragraph_content'])
+        paragraph_content = search_results['data'][0]['paragraph_content']
+
+        return paragraph_content
         
-        results = ["Sample text chunk", "Another sample text chunk", "A third sample text chunk"]
-        # Build context from retrieved chunks
-        context = ""
-        for hit in results:
-            chunk_text = hit
-            if chunk_text:
-                context += chunk_text + "\n\n"
+        # results = ["Sample text chunk", "Another sample text chunk", "A third sample text chunk"]
+        # # Build context from retrieved chunks
+        # context = ""
+        # for hit in results:
+        #     chunk_text = hit
+        #     if chunk_text:
+        #         context += chunk_text + "\n\n"
                 
-        return context.strip()
+        # return context.strip()
         
     except Exception as e:
         print(f"Error retrieving context: {str(e)}")
         return ""
 
-
+token = "Bearer 947d431def2443a76801786c91ae4a7e3bdb593181385ac201cf2582de95bd513b06d927e9415ba185227b905158456d7d2b2789"
 def search_vectors(data: list) -> dict:
-    """
-    Searches for vectors in Zilliz cloud using the provided data
-    
-    Args:
-        data: Vector data to search with
-        
-    Returns:
-        Search results from Zilliz cloud
-    """
     try:
         url = "https://in05-24d6ba4a10ba788.serverless.gcp-us-west1.cloud.zilliz.com/v2/vectordb/entities/search"
         
         headers = {
             "Accept": "application/json",
-            "Authorization": "Bearer 947d431def2443a76801786c91ae4a7e3bdb593181385ac201cf2582de95bd513b06d927e9415ba185227b905158456d7d2b2789",
+            "Authorization": token,
             "Content-Type": "application/json"
         }
 

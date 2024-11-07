@@ -5,7 +5,8 @@ from llm_client import get_llm_completion
 def get_completion_response(model: str, messages: List[Dict]) -> Dict:
     prompt = messages[1].get('content')
     context = get_relevant_context(prompt)
-    messages[1]['content'] = "Context:\n" + context + "\n---\nBased on the above context, answer the following question: " + messages[1]['content']
+    # print(" -- context: ", context)
+    prompt = "Context:\n" + context + "\n---\nBased on the above context, answer the following question: " + prompt
     completion = get_llm_completion(messages)
     
     return {

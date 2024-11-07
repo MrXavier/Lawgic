@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from service import get_completion_response, get_chatbot_response
+from service import get_chatbot_response, get_completion_response
 
 app = Flask(__name__)
 CORS(app)
@@ -32,6 +32,18 @@ def get_completion():
 
 @app.route('/chatbot', methods=['POST']) 
 def chat_with_bot():
+    data = request.get_json()
+    print(data)
+
+    message = data.get('message')
+
+    return jsonify({
+        "reply": "Sample chatbot response",
+        "message": message
+    })
+
+@app.route('/chatcontract', methods=['POST']) 
+def chat_with_contract():
     data = request.get_json()
     print(data)
 

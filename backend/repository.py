@@ -1,4 +1,7 @@
-def get_relevant_context(message: str) -> str:
+from emb_client import get_embedding
+import requests
+
+def get_relevant_context(question: str) -> str:
     """
     Retrieves relevant text chunks from Milvus vector DB based on input message
     and builds a context string from the chunks.
@@ -10,28 +13,12 @@ def get_relevant_context(message: str) -> str:
         String containing concatenated relevant text chunks as context
     """
     try:
-        # # Initialize Milvus client
-        # client = MilvusClient(
-        #     uri="localhost:19530",
-        #     token=""  # Add token if authentication is enabled
-        # )
-        
-        # # Convert message to vector embedding
-        # embedding = get_embedding(message)
-        
-        # # Search for similar vectors in Milvus
-        # search_params = {
-        #     "metric_type": "L2",
-        #     "params": {"nprobe": 10}
-        # }
-        
-        # results = client.search(
-        #     collection_name="text_chunks",
-        #     data=[embedding],
-        #     limit=5,
-        #     output_fields=["text"],
-        #     search_params=search_params
-        # )
+        embedding_resp = get_embedding(question)
+        embedding = embedding_resp.get("predictions")[0]
+        # print(" -- embedding:", embedding)
+
+        search_results = search_vectors(embedding)
+        # print(" -- search_results:", search_results)
         
         results = ["Sample text chunk", "Another sample text chunk", "A third sample text chunk"]
         # Build context from retrieved chunks
@@ -47,3 +34,50 @@ def get_relevant_context(message: str) -> str:
         print(f"Error retrieving context: {str(e)}")
         return ""
 
+
+def search_vectors(data: list) -> dict:
+    """
+    Searches for vectors in Zilliz cloud using the provided data
+    
+    Args:
+        data: Vector data to search with
+        
+    Returns:
+        Search results from Zilliz cloud
+    """
+    try:
+        url = "https://in05-24d6ba4a10ba788.serverless.gcp-us-west1.cloud.zilliz.com/v2/vectordb/entities/search"
+        
+        headers = {
+            "Accept": "application/json",
+            "Authorization": "Bearer 947d431def2443a76801786c91ae4a7e3bdb593181385ac201cf2582de95bd513b06d927e9415ba185227b905158456d7d2b2789",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "collectionName": "Laws",
+            "data": data,
+            "limit": 10,
+            "outputFields": ["*"]
+        }
+        # print(" -- payload:", payload)
+
+        response = requests.post(url, headers=headers, json=payload)
+        return response.json()
+
+    except Exception as e:
+        print(f"Error searching vectors: {str(e)}")
+        return {}
+
+
+## Paragraph
+# Sample text chunk. Another sample text chunk. A third sample text chunk.
+
+# vector: Sample text chunk.
+# metadata: {"paragraph": "Sample text chunk. Another sample text chunk. A third sample text chunk."}
+
+# vector: Another sample text chunk.
+# metadata: {"paragraph": "Sample text chunk. Another sample text chunk. A third sample text chunk."}
+
+# vector: A third sample text chunk.
+# metadata: {"paragraph": "Sample text chunk. Another sample text chunk. A third sample text chunk."}

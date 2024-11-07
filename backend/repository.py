@@ -21,6 +21,11 @@ def get_relevant_context(question: str) -> str:
         # print(" -- search_results:", search_results)
         # print(" -- paragraph_content: " + search_results['data'][0]['paragraph_content'])
         paragraph_content = search_results['data'][0]['paragraph_content']
+        paragraph_content += "\n\n" + search_results['data'][1]['paragraph_content']
+        paragraph_content += "\n\n" + search_results['data'][2]['paragraph_content']
+        paragraph_content += "\n\n" + search_results['data'][3]['paragraph_content']
+        paragraph_content += "\n\n" + search_results['data'][4]['paragraph_content']
+        paragraph_content += "\n\n" + search_results['data'][5]['paragraph_content']
 
         return paragraph_content
         

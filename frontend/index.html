@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lawgic</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amita&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Alegreya&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-tab">
+            <img src="imgs/legislab-logo.png" alt="Legis Lab Icon" width="100" height="100">
+            <h1>Lawgic</h1>
+
+        </div>
+
+        <div id="assist-tab" class="tabcontent">
+            <div class="result">
+                Answer:
+                <!-- allow autocomplete with used previous values -->
+                <textarea id="result" name="result" class="result" rows="1" cols="50" placeholder="Responsa será apresentada aqui" disabled></textarea>
+            </div>
+            <form>
+                <div>
+                    <label for="question">Question:</label>
+                    <textarea id="question" name="question" rows="2" cols="50"  placeholder="Escreva sua pergunta ou quesão aqui..." required></textarea>
+                </div>
+                <button type="button" onclick="submitPrompt()">Enviar</button>
+            </form>
+        </div>
+
+        <div id="analysis-tab" class="tabcontent" style="display:none">
+            <form>
+                <ul id="list"></ul>
+                <div class="inline-input-div">
+                    <label for="url-input">URL:</label>
+                    <input class="inline-input" type="url" id="url-input" name="url-input">
+                    <button class="inline-button" type="button" onclick="addUrl()">Add URL</button>
+                </div>
+                <div class="inline-input-div">
+                    <label for="file-input" style="margin-right: 13px;">File:</label>
+                    <input class="inline-input"  type="file" id="file-input" name="file-input">
+                    <button class="inline-button" type="button" onclick="addFile()">Add File</button>
+                </div>
+
+                <div class="result">
+                    Resposta:
+                    <textarea id="result-analysis" name="result-analysis" class="result" rows="1" cols="50" placeholder="Responsa será apresentada aqui" disabled></textarea>
+                </div>
+                <div>
+                    <label for="question-analysis">Pergunta:</label>
+                    <textarea id="question-analysis" name="question-analysis" rows="2" cols="50"  placeholder="Pergunte algo sobre os documentos acima..." required></textarea>
+                </div>
+                <button type="button" onclick="submitAnalysis()">Enviar</button>
+            </form>
+        </div>
+
+        <div id="template-tab" class="tabcontent" style="display:none">
+            <form>
+                Modelos:
+                <div class="inline-input-div">
+                    <button class="template-select active" name="contrato de compra e venda" type="button" onclick="selectTemplate(event, 'contrato')">Contrato Compra/Venda</button>
+                    <button class="template-select" name="peticao" type="button" onclick="selectTemplate(event, 'peticao')">Petição</button>
+                    <button class="template-select" name="contestacao" type="button" onclick="selectTemplate(event, 'contestacao')">Contestação</button>
+                    <button class="template-select" name="procuracao" type="button" onclick="selectTemplate(event, 'procuracao')">Procuração</button>
+                    <button class="template-select" name="testamento" type="button" onclick="selectTemplate(event, 'testamento')">Testamento</button>
+                    <button class="template-select" name="patente" type="button" onclick="selectTemplate(event, 'patente')">Patente</button>
+                </div>
+                <div class="result">
+                    Resposta:
+                    <textarea id="result-template" name="result-template" class="result" rows="1" cols="50" placeholder="Responsa será apresentada aqui" disabled></textarea>
+                </div>
+                <div>
+                    <label for="context-template">Contexto:</label>
+                    <textarea id="context-template" name="context-template" rows="3" cols="50" placeholder="Escreva o contexto aqui..." required></textarea>
+                </div>
+                <button type="button" onclick="submitTemplate()">Enviar</button>
+            </form>
+        </div>
+
+        <div id="compare-tab" class="tabcontent" style="display:none">
+            <form>
+                <div class="result">
+                    Resposta:
+                    <textarea id="result-compare" name="result-compare" class="result" rows="1" cols="50" placeholder="Responsa será apresentada aqui" disabled></textarea>
+                </div>
+                <div>
+                    <label for="comp-text-1">Texto 1:</label>
+                    <textarea id="comp-text-1" name="comp-text-1" rows="3" cols="50" placeholder="Escreva o primeiro texto aqui..." required></textarea>
+                </div>
+                <div>
+                    <label for="comp-text-2">Texto 2:</label>
+                    <textarea id="comp-text-2" name="comp-text-2" rows="3" cols="50" placeholder="Escreva o segundo texto aqui..." required></textarea>
+                </div>
+                <button type="button" onclick="submitCompare()">Comparar</button>
+            </form>
+        </div>
+        <br><br><br><br><br><br>
+    </div>
+    <footer>
+        <div>
+            <p>Press  |  Tech Blog  |  Corporate</p>
+            <p>Privacy Settings  |  Privacy Policy  |  Legal Notice</p>
+        </div>
+        <div>
+            <a href="#">Linkedin</a>
+            </p>
+            <a href="#">Twitter</a>
+        </div>
+        <div>
+            <p>© 2023 Lawgic. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        function selectTemplate(evt, template) {
+            var i, tablinks;
+            tablinks = document.getElementsByClassName("template-select");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            evt.currentTarget.className += " active";
+        }
+        function addUrl() {
+            const urlInput = document.getElementById("url-input");
+            const url = urlInput.value;
+            if (url) {
+                const list = document.getElementById("list");
+                const listItem = document.createElement("li");
+                listItem.textContent = url;
+                list.appendChild(listItem);
+                urlInput.value = "";
+            }
+        }
+
+        function addFile() {
+            const fileInput = document.getElementById("file-input");
+            const file = fileInput.files[0];
+            if (file) {
+                const list = document.getElementById("list");
+                const listItem = document.createElement("li");
+                listItem.textContent = file.name;
+                list.appendChild(listItem);
+                fileInput.value = "";
+            }
+        }
+    </script>
+</body>
+</html>

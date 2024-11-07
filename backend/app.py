@@ -16,19 +16,18 @@ def get_completion():
   data = request.get_json()
   print("request json: ", data)
 
-  model = data.get('model')
   messages = data.get('messages')
   
   if messages is None or messages == []:
       return jsonify({"error": "Missing required parameters 'messages'"}), 400
       
-  response = get_completion_response(model, messages)
+  response = get_completion_response("", messages)
 
   return jsonify({
       "response": response.get('completion'),
-      "model": response.get('model'),
       "messages": response.get('messages')
   })
+  
 
 @app.route('/chatbot', methods=['POST']) 
 def chat_with_bot():

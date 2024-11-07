@@ -13,7 +13,6 @@ def get_completion_response(model: str, messages: List[Dict]) -> Dict:
     
     return {
         "completion": completion,
-        "model": model,
         "messages": messages
     }
 

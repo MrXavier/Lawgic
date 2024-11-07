@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from service import get_completion_response, get_chatbot_response
 
 app = Flask(__name__)
 CORS(app)
@@ -12,17 +13,21 @@ def health_check():
 
 @app.route('/completion', methods=['POST'])
 def get_completion():
-  # deserilize the body in a boject
   data = request.get_json()
   print(data)
 
   model = data.get('model')
   messages = data.get('messages')
+  
+  if messages is None or messages == []:
+      return jsonify({"error": "Missing required parameters 'messages'"}), 400
+      
+  response = get_completion_response(model, messages)
 
   return jsonify({
-      "completion": "Sample completion response",
-      "model": model,
-      "messages": messages
+      "response": response.get('completion'),
+      "model": response.get('model'),
+      "messages": response.get('messages')
   })
 
 @app.route('/chatbot', methods=['POST']) 
@@ -41,22 +46,3 @@ def chat_with_bot():
 
 if __name__ == '__main__':
     app.run(debug=True)
-# POST /completion
-# body: {
-#   "model": "string",
-#   "messages": [
-#     {
-#       "role": "system",
-#       "content": "You are a helpful assistant."
-#     },
-#     {
-#       "role": "user",
-#       "content": "Hello!"
-#     }
-#   ]
-# }
-
-# POST /chatbot
-# body: {
-#   "message": "string"
-# }

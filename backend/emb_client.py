@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+google_auth_token = os.getenv("GOOGLE_AUTH_TOKEN")
+params_key = os.getenv("PARAMS_KEY")
+
 def get_embedding(text: str) -> dict:
     """
     Gets embedding from Google Cloud AI Platform Prediction API
@@ -17,7 +20,7 @@ def get_embedding(text: str) -> dict:
     try:
         url = "https://europe-west1-prediction-aiplatform.clients6.google.com/ui/projects/1034507428097/locations/europe-west1/endpoints/329382897356111872:predict"
         params = {
-            "key": "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g"
+            "key": params_key
         }
         
         headers = {

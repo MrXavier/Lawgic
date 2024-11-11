@@ -18,7 +18,7 @@ def get_relevant_context(question: str) -> str:
         # print(" -- embedding:", embedding)
 
         search_results = search_vectors(embedding)
-        # print(" -- search_results:", search_results)
+        print(" -- search_results:", search_results)
         # print(" -- paragraph_content: " + search_results['data'][0]['paragraph_content'])
         paragraph_content = search_results['data'][0]['paragraph_content']
         paragraph_content += "\n\n" + search_results['data'][1]['paragraph_content']

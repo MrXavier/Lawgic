@@ -35,3 +35,5 @@ def get_lchain_llm_completion(prompt:str) -> str:
     except Exception as e:
         print(f"Error getting LLM completion: {str(e)}")
         return ""
+
+# print(get_llm_completion("Can a 16 year old person stir or drive a boat?"))
